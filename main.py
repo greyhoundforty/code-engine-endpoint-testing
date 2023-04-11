@@ -32,15 +32,23 @@ def setup_logger():
 
 def check_url(url):
     logger = setup_logger()
-    response = requests.get(url)
-    logger.info(f"Status code for base URL {url}: {response.status_code}")
+    try:
+        response = requests.get(url)
+        logger.info(f"Status code for base URL {url}: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error checking base URL {url}: {e}")
+
 
 def get_virtual_guests(apiEndpoint):
     logger = setup_logger()
     url = str(apiEndpoint + "/rest/v3/SoftLayer_Account/getVirtualGuests")
     headers = {"Authorization": f"Basic {username}:{api_key}"}
-    response = requests.get(url, headers=headers)
-    logger.info(f"Status code for authenticated call to {url}: {response.status_code}")
+    try:
+        response = requests.get(url, headers=headers)
+        logger.info(f"Status code for authenticated call to {url}: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error making authenticated call to {url}: {e}")
+
 
 def main():
     logger = setup_logger()
